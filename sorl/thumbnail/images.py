@@ -85,6 +85,7 @@ class ImageFile(BaseImageFile):
         else:
             self.storage = default_storage
 
+    @property
     def file_hash(self):
         if self.exists():
             return "%s%s" % (self.storage.size(self.name), self.storage.modified_time(self.name))
