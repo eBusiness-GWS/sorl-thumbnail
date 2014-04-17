@@ -16,27 +16,34 @@ def parse_geometry(geometry, ratio=None, options=None):
     Parses a geometry string syntax and returns a (width, height) tuple
     """
     m = geometry_pat.match(geometry)
+
     def syntax_error():
-        return ThumbnailParseError('Geometry does not have the correct '
-                'syntax: %s' % geometry)
+        return ThumbnailParseError('Geometry does not have the correct syntax: %s' % geometry)
+
     if not m:
         raise syntax_error()
+
     x = m.group('x')
     y = m.group('y')
+
     if x is None and y is None:
         raise syntax_error()
+
     if x is not None:
         x = int(x)
+
     if y is not None:
         y = int(y)
+
     # calculate x or y proportionally if not set but we need the image ratio
     # for this
-    if ratio is not None:
+    if options and ratio is not None:
         ratio = float(ratio)
         if x is None or (ratio < 1.0 and options.get('crop', 'noop') == 'noop'):
             x = toint(y * ratio)
         elif y is None or (ratio > 1.0 and options.get('crop', 'noop') == 'noop'):
             y = toint(x / ratio)
+
     return x, y
 
 
